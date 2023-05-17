@@ -13,15 +13,15 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.numeric
 import fs2.{Pipe, Stream}
 import higherkindness.droste._
-import org.tessellation.ext.kryo._
-import org.tessellation.kernel.Cell.NullTerminal
-import org.tessellation.kernel._
-import org.tessellation.schema.address.Address
+import org.shiwa.ext.kryo._
+import org.shiwa.kernel.Cell.NullTerminal
+import org.shiwa.kernel._
+import org.shiwa.schema.address.Address
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 object L0TokenDef extends StateChannelDef[L0TokenStep, Ω, L0TokenStep] {
 
-  override val address = Address("DAG3k3VihUWMjse9LE93jRqZLEuwGd6a5Ypk4zYS")
+  override val address = Address("SHI3k3VihUWMjse9LE93jRqZLEuwGd6a5Ypk4zYS")
 
   override val kryoRegistrar: Map[Class[_], StateChannelKryoRegistrationId] =
     Map(

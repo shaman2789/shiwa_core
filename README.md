@@ -1,39 +1,40 @@
-tessellation
+
+SHIWA
 ===========
 
-![build](https://img.shields.io/github/actions/workflow/status/Constellation-Labs/tessellation/release.yml?label=build)
-![version](https://img.shields.io/github/v/release/Constellation-Labs/tessellation?sort=semver)
+![build](https://img.shields.io/github/actions/workflow/status/........)
+![version](https://img.shields.io/github/v/release/..........)
 
-## Running L0 & L1 in Kubernetes
+## Запуск класстеров L0 и L1 в Kubernetes
 
-### Prerequisites
+### Подготовка
 
 1. [sbt](https://www.scala-sbt.org/)
-2. [Docker Desktop](https://www.docker.com/get-started/) with [Kubernetes](https://docs.docker.com/desktop/kubernetes/) enabled
+2. [Docker Desktop](https://www.docker.com/get-started/) с включенным [Kubernetes](https://docs.docker.com/desktop/kubernetes/)
 3. [Skaffold CLI](https://skaffold.dev/docs/install/#standalone-binary)
 
-### Starting clusters
+### Запуск кластеров
 
 ```
 skaffold dev --trigger=manual
 ```
 
-This will start both L0 and L1 clusters on kubernetes using current kube-context.
+Это запустит кластеры L0 и L1 на Kubernetes с использованием текущего контекста kube.
 
-Initial validators for L0 and L1 have their public ports mapped to local ports 9000 and 9010 respectively.
+Начальные валидаторы для L0 и L1 имеют свои общедоступные локальные порты 9000 и 9010 соответственно.
 
 ```
 curl localhost:9000/cluster/info
 curl localhost:9010/cluster/info
 ```
 
-This will return a list of validators on L0 and L1. By default, both L0 and L1 clusters starts with 3 validators 
-(1 initial and 2 regular).
+Это вернет список валидаторов на кластерах L0 и L1. По умолчанию как для L0, так и для L1 кластеров стартуют с 3 валидаторами 
+(1 начальный и 2 регулярных).
 
-### Scaling a cluster
+### Масштабирование кластера
 
 ```
 kubectl scale deployment/l0-validator-deployment --replicas=9
 ```
 
-This scales the L0 cluster to 10 validators total: 1 initial and 9 regular.
+Это масштабирует кластер L0 до 10 валидаторов в общей сложности: 1 начальный и 9 регулярных.

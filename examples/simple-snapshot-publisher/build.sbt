@@ -17,7 +17,7 @@ generateInput := {
 lazy val root = (project in file("."))
   .settings(
     name := "simple-snapshot-publisher",
-    libraryDependencies ++= cats ++ catsEffect ++ droste ++ refined ++ tessellation ++ decline,
+    libraryDependencies ++= cats ++ catsEffect ++ droste ++ refined ++ shiwa ++ decline,
     assemblyPackageScala / assembleArtifact := false, /** Exclude Scala Standard Library from an assembly jar file */
     Compile / run := Defaults
       .runTask(Compile / fullClasspath, Compile / run / mainClass, Compile / run / runner)

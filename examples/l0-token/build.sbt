@@ -17,7 +17,7 @@ lazy val root = (project in file("."))
       Libraries.drosteCore,
       Libraries.drosteLaws,
       Libraries.drosteMacros,
-      Libraries.tessellationShared,
-      Libraries.tessellationKernel
+      Libraries.shiwaShared,
+      Libraries.shiwaKernel
     )
   )

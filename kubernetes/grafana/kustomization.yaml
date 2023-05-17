@@ -7,7 +7,7 @@ configMapGenerator:
   - name: grafana-dashboards
     files:
       - dashboards/dashboards.yaml
-      - dashboards/tessellation.json
+      - dashboards/shiwa.json
       - dashboards/jvm-micrometer_rev9.json
   - name: grafana-config
     files:

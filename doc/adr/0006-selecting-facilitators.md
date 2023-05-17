@@ -1,6 +1,3 @@
-# 6. Selecting facilitators
-
-Date: 2022-01-17
 
 ## Status
 

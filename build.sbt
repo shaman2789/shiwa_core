@@ -1,21 +1,28 @@
-import Dependencies._
+// Данный код представляет собой конфигурационный файл для сборки проекта Shiwa на языке Scala с использованием sbt (Scala Build Tool). 
 
-ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / organization := "org.constellation"
-ThisBuild / organizationName := "tessellation"
+// Здесь задаются настройки для сборки проекта, добавляются репозитории, указываются зависимости от внешних библиотек, 
+// настраивается интеграция с плагинами scalafix и scalafmt, а также прописываются настройки для создания Docker-образов. 
+// Определены основные модули проекта, их зависимости и настройки. Также заданы различные флаги для сборки, такие как 
+// `fork`, `cancelable`, `onChangedBuildSource`. 
 
-ThisBuild / evictionErrorLevel := Level.Warn
-ThisBuild / scalafixDependencies += Libraries.organizeImports
+import Dependencies._ //импортирует зависимости, указанные в файле Dependencies.
 
-resolvers += Resolver.sonatypeRepo("snapshots")
+ThisBuild / scalaVersion := "2.13.10"  // устанавливает версию языка программирования Scala в 2.13.10.
+ThisBuild / organization := "org.shiwa" //устанавливает имя организации для проекта.
+ThisBuild / organizationName := "shiwa-network" //устанавливает название организации для проекта.
 
-val scalafixCommonSettings = inConfig(IntegrationTest)(scalafixConfigSettings(IntegrationTest))
+ThisBuild / evictionErrorLevel := Level.Warn //задает уровень сообщения об ошибке при конфликтах версий зависимостей.
+ThisBuild / scalafixDependencies += Libraries.organizeImports //добавляет scalafix в зависимости проекта.
 
-bloopExportJarClassifiers in Global := Some(Set("sources"))
+resolvers += Resolver.sonatypeRepo("snapshots") //добавляет репозиторий для загрузки зависимостей проекта.
 
-val ghTokenSource = TokenSource.GitConfig("github.token") || TokenSource.Environment("GITHUB_TOKEN")
+val scalafixCommonSettings = inConfig(IntegrationTest)(scalafixConfigSettings(IntegrationTest)) //оздает общие настройки scalafix для интеграционного тестирования.
 
-githubTokenSource := ghTokenSource
+bloopExportJarClassifiers in Global := Some(Set("sources")) //настройка Bloop, позволяющая экспортировать исходный код.
+
+val ghTokenSource = TokenSource.GitConfig("github.token") || TokenSource.Environment("GITHUB_TOKEN") //устанавливает источник токена GitHub.
+
+githubTokenSource := ghTokenSource //задает общие настройки для проекта, такие как настройки компилятора, resolvers и источника токена GitHub.
 
 lazy val commonSettings = Seq(
   scalacOptions ++= List("-Ymacro-annotations", "-Yrangepos", "-Wconf:cat=unused:info", "-language:reflectiveCalls"),
@@ -26,9 +33,9 @@ lazy val commonSettings = Seq(
     Resolver.githubPackages("abankowski", "http-request-signer")
   ),
   githubTokenSource := ghTokenSource
-)
+)     
 
-lazy val commonTestSettings = Seq(
+lazy val commonTestSettings = Seq(  //задает общие настройки для тестов проекта.
   testFrameworks += new TestFramework("weaver.framework.CatsEffect"),
   libraryDependencies ++= Seq(
     Libraries.weaverCats,
@@ -38,7 +45,7 @@ lazy val commonTestSettings = Seq(
   ).map(_ % Test)
 )
 
-ThisBuild / assemblyMergeStrategy := {
+ThisBuild / assemblyMergeStrategy := {   //настройка сборки проекта, которая задает правила для слияния файлов.
   case "logback.xml"                                       => MergeStrategy.first
   case x if x.contains("io.netty.versions.properties")     => MergeStrategy.discard
   case PathList(xs @ _*) if xs.last == "module-info.class" => MergeStrategy.first
@@ -47,26 +54,27 @@ ThisBuild / assemblyMergeStrategy := {
     oldStrategy(x)
 }
 
-Global / fork := true
-Global / cancelable := true
-Global / onChangedBuildSource := ReloadOnSourceChanges
+Global / fork := true //задает использование отдельного процесса для выполнения тестов.
+Global / cancelable := true //задает возможность прерывания выполнения задач.
+Global / onChangedBuildSource := ReloadOnSourceChanges //задает автоматическую перезагрузку проекта при изменении исходного кода
 
-lazy val dockerSettings = Seq(
-  Docker / packageName := "tessellation",
+
+lazy val dockerSettings = Seq(  //задает настройки для Docker-образа проекта.
+  Docker / packageName := "shiwa",
   dockerBaseImage := "openjdk:jre-alpine"
 )
 
-lazy val root = (project in file("."))
+lazy val root = (project in file(".")) //создает корневой проект с именем "shiwa" и устанавливает зависимости от других модулей.
   .settings(
-    name := "tessellation"
+    name := "shiwa"
   )
   .aggregate(keytool, kernel, shared, core, testShared, wallet, sdk, dagL1, rosetta, currencyL0, currencyL1, tools)
 
-lazy val kernel = (project in file("modules/kernel"))
+lazy val kernel = (project in file("modules/kernel")) // создает модуль "kernel" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .dependsOn(shared, testShared % Test)
   .settings(
-    name := "tessellation-kernel",
+    name := "shiwa-kernel",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -80,11 +88,11 @@ lazy val kernel = (project in file("modules/kernel"))
     )
   )
 
-lazy val wallet = (project in file("modules/wallet"))
+lazy val wallet = (project in file("modules/wallet")) // создает модуль "wallet" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .dependsOn(keytool, shared, testShared % Test)
   .settings(
-    name := "tessellation-wallet",
+    name := "shiwa-wallet",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -110,11 +118,11 @@ lazy val wallet = (project in file("modules/wallet"))
     )
   )
 
-lazy val keytool = (project in file("modules/keytool"))
+lazy val keytool = (project in file("modules/keytool")) // создает модуль "keytools" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .dependsOn(shared, testShared % Test)
   .settings(
-    name := "tessellation-keytool",
+    name := "shiwa-keytool",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -152,14 +160,14 @@ lazy val keytool = (project in file("modules/keytool"))
     )
   )
 
-lazy val shared = (project in file("modules/shared"))
+lazy val shared = (project in file("modules/shared")) // создает модуль "shared" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .enablePlugins(BuildInfoPlugin)
   .dependsOn(testShared % Test)
   .settings(
-    name := "tessellation-shared",
+    name := "shiwa-shared",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "org.tessellation",
+    buildInfoPackage := "org.shiwa",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -208,10 +216,10 @@ lazy val shared = (project in file("modules/shared"))
       Libraries.http4sCore
     )
   )
-lazy val testShared = (project in file("modules/test-shared"))
+lazy val testShared = (project in file("modules/test-shared")) // создает модуль "test-shared" и задает его зависимости и настройки.
   .configs(IntegrationTest)
   .settings(
-    name := "tessellation-test-shared",
+    name := "shiwa-test-shared",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -242,11 +250,11 @@ lazy val testShared = (project in file("modules/test-shared"))
     )
   )
 
-lazy val sdk = (project in file("modules/sdk"))
+lazy val sdk = (project in file("modules/sdk"))  // создает модуль "sdk" и задает его зависимости и настройки.
   .dependsOn(shared % "compile->compile;test->test", testShared % Test, keytool, kernel)
   .configs(IntegrationTest)
   .settings(
-    name := "tessellation-sdk",
+    name := "shiwa-sdk",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -291,10 +299,10 @@ lazy val sdk = (project in file("modules/sdk"))
     )
   )
 
-lazy val rosetta = (project in file("modules/rosetta"))
+lazy val rosetta = (project in file("modules/rosetta")) // создает модуль "rosetta" и задает его зависимости и настройки.
   .dependsOn(kernel, shared % "compile->compile;test->test", sdk, testShared % Test)
   .settings(
-    name := "tessellation-rosetta",
+    name := "shiwa-rosetta",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -315,13 +323,13 @@ lazy val rosetta = (project in file("modules/rosetta"))
     )
   )
 
-lazy val dagL1 = (project in file("modules/dag-l1"))
+lazy val dagL1 = (project in file("modules/dag-l1")) // создает модуль "dag-l1" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .enablePlugins(JavaAppPackaging)
   .dependsOn(kernel, shared % "compile->compile;test->test", sdk, testShared % Test)
   .configs(IntegrationTest)
   .settings(
-    name := "tessellation-dag-l1",
+    name := "shiwa-dag-l1",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -356,12 +364,12 @@ lazy val dagL1 = (project in file("modules/dag-l1"))
       Libraries.sqlite
     )
   )
-lazy val tools = (project in file("modules/tools"))
+lazy val tools = (project in file("modules/tools")) // создает модуль "tools" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .enablePlugins(JavaAppPackaging)
   .dependsOn(core, dagL1)
   .settings(
-    name := "tessellation-tools",
+    name := "shiwa-tools",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -402,12 +410,12 @@ lazy val tools = (project in file("modules/tools"))
       Libraries.skunkCirce
     )
   )
-lazy val core = (project in file("modules/core"))
+lazy val core = (project in file("modules/core")) // создает модуль "core" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .enablePlugins(JavaAppPackaging)
   .dependsOn(keytool, kernel, shared % "compile->compile;test->test", testShared % Test, sdk)
   .settings(
-    name := "tessellation-core",
+    name := "shiwa-core",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -468,10 +476,10 @@ lazy val core = (project in file("modules/core"))
     )
   )
 
-lazy val currencyL1 = (project in file("modules/currency-l1"))
+lazy val currencyL1 = (project in file("modules/currency-l1")) // создает модуль "currency-l1" и задает его зависимости и настройки.
   .dependsOn(dagL1, sdk, shared)
   .settings(
-    name := "tessellation-currency-l1",
+    name := "shiwa-currency-l1",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,
@@ -483,15 +491,15 @@ lazy val currencyL1 = (project in file("modules/currency-l1"))
     )
   )
 
-lazy val currencyL0 = (project in file("modules/currency-l0"))
+lazy val currencyL0 = (project in file("modules/currency-l0"))  // создает модуль "currency-l0" и задает его зависимости и настройки.
   .enablePlugins(AshScriptPlugin)
   .enablePlugins(BuildInfoPlugin)
   .enablePlugins(JavaAppPackaging)
   .dependsOn(keytool, kernel, shared % "compile->compile;test->test", testShared % Test, sdk)
   .settings(
-    name := "tessellation-currency-l0",
+    name := "shiwa-currency-l0",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "org.tessellation.currency",
+    buildInfoPackage := "org.shiwa.currency",
     Defaults.itSettings,
     scalafixCommonSettings,
     commonSettings,

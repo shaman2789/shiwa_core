@@ -8,13 +8,13 @@ import cats.syntax.flatMap._
 import cats.syntax.show._
 import eu.timepit.refined.auto._
 import higherkindness.droste.{AlgebraM, CoalgebraM, scheme}
-import org.tessellation.kernel._
-import org.tessellation.schema.address.Address
+import org.shiwa.kernel._
+import org.shiwa.schema.address.Address
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 object SimpleSnapshotPublisherDef extends StateChannelDef[EmitSimpleSnapshot, Ω, EmitSimpleSnapshot] {
 
-  val address: Address = Address("DAG3k3VihUWMjse9LE93jRqZLEuwGd6a5Ypk4zYS")
+  val address: Address = Address("SHI3k3VihUWMjse9LE93jRqZLEuwGd6a5Ypk4zYS")
 
   val kryoRegistrar = Map(
     classOf[EmitSimpleSnapshot] -> 1000,

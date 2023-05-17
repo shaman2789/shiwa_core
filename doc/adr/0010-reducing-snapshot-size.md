@@ -66,8 +66,10 @@ Replacing existing `GlobalSnapshotInfo` type with a type `GlobalSnapshotInfos` w
 One of the advantages of this representation are flexible aggregation schemes.
 
 Simple scheme:
+
 1. if snapshot satisfies `ordinal mod 1000 == 1` then aggregate since 0 (genesis)
 2. otherwise aggregate since last snapshot satisfying predicate from pt. 1
+
 ```mermaid
 graph RL;
     A(ordinal = 2000, since = 1001)
@@ -76,10 +78,12 @@ graph RL;
 ```
 
 More complicated scheme:
+
 1. if snapshot satisfies `ordinal mod 1000 == 0` then aggregate since 0 (genesis)
 2. if snapshot satisfies `ordinal mod 100 == 0` then aggregate since last snapshot satisfying predicate from pt. 1
 3. if snapshot satisfies `ordinal mod 10 == 0` then aggregate since last snapshot satisfying predicate from pt. 2
 4. otherwise, aggregate since last snapshot satisfying predicate from pt. 3
+
 ```mermaid
 graph RL;
     A(ordinal = 1999, since = 1990)
@@ -92,19 +96,20 @@ graph RL;
 ```
 
 You may notice that in the **Simple scheme** the first predicate is `ordinal mod 1000 == 1` in contrast to
-`ordinal mod 1000 == 0` from the **More complicated scheme**, that is because in the first scheme we 
+`ordinal mod 1000 == 0` from the **More complicated scheme**, that is because in the first scheme we
 do not want to aggregate the genesis (snapshot with ordinal 0) in first 1k snapshots. The genesis will be aggregated in
-a snapshot with ordinal 1, but not in 2, 3, ..., 1000. It may save some resources if the genesis snapshot is large. 
+a snapshot with ordinal 1, but not in 2, 3, ..., 1000. It may save some resources if the genesis snapshot is large.
 
 ### Aggregated view resolution
 
 Algorithm for resolving an aggregated view of all data - from the genesis to the latest snapshot:
+
 1. Variable initialization:
     * `snapshot := <latest-snapshot>`
     * `acc := snapshot.info.aggregated`
 2. Loop:
     * if `snapshot.info.aggregated.since.ordinal` is equal to `0` return `acc`
-    * otherwise, get the snapshot with ordinal `snapshot.info.aggregated.since.ordinal` 
+    * otherwise, get the snapshot with ordinal `snapshot.info.aggregated.since.ordinal`
     * if obtained snapshot hash is equal to `snapshot.info.aggregated.since.hash`, assign it to `snapshot`
     * otherwise, raise an error
     * combine `acc` with `snapshot.info.aggregated` and assign it to `acc`
@@ -112,14 +117,16 @@ Algorithm for resolving an aggregated view of all data - from the genesis to the
 
 ### Example of first 2000 snapshots
 
-This example uses a **Simple scheme** presented in section [Aggregation schemes](#aggregation-schemes). 
+This example uses a **Simple scheme** presented in section [Aggregation schemes](#aggregation-schemes).
 
 Simplifications:
+
 * all snapshots that are not listed below didn't contain any transactions
 * rewards were 0 for all snapshots
 * some fields were omitted for clarity
 
 Snapshots:
+
 - [Snapshot 0 (genesis)](#snapshot-0)
 - [Snapshot 1](#snapshot-1)
 - [Snapshot 2](#snapshot-2)
@@ -400,10 +407,9 @@ Snapshots:
 }
 ```
 
-
 ## Consequences
 
 - Initial download of `GlobalSnapshot` has to be adjusted on both L0 and L1.
 - Properties of `GlobalSnapshot` that were previously accessed by the block explorer under `info` path have to updated
- to `infos.snapshot`.
+  to `infos.snapshot`.
 

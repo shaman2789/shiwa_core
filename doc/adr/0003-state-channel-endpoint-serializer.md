@@ -1,25 +1,17 @@
 # 3. State-Channel Endpoint Serializer
 
-Date: 2022-01-12
+Дата: 2023-01-12
 
-## Status
+## Контекст
 
-Accepted
+Вопрос: Может ли L0 Cell state-channel получать данные в формате, отличном от бинарной сериализации Kryo?
 
-## Context
+Использование: Для L0 Token было бы проще разрешить ввод в формате JSON, чтобы сторонние разработчики могли использовать другие языки программирования, кроме JVM.
 
-Question: Can state-channel L0 Cell endpoint receive data in format other than
-binary serialized by Kryo?
+## Решение
 
-Use case: For L0 Token it would be easier to allow for JSON input so then 3rd
-party developer can use other programming languages than JVM.
+Мы не разрешим использование сериализаторов, отличных от Kryo, по соображениям безопасности.
 
-## Decision
+## Последствия
 
-We will not allow for other serializers than Kryo, due to security reasons.
-
-## Consequences
-
-If someone would like to send the JSON input to the state-channel endpoint, one
-needs to create for example a proxy-server that will translate JSON to binary
-Kryo data and forward it to the network.
+Если кто-то хочет отправить входные данные в формате JSON в конечную точку L0 state-channel, необходимо создать, например, прокси-сервер, который будет переводить JSON в двоичные данные Kryo и пересылать их по сети.

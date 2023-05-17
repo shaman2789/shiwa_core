@@ -1,21 +1,14 @@
-# 1. Record architecture decisions
 
-Date: 2022-01-05
+# 1. Запись архитектурных решений
 
-## Status
 
-Accepted
 
-## Context
+Архитектурные решения, принятые в этом проекте:
+..........
 
-We need to record the architectural decisions made on this project.
 
-## Decision
+Мы будем описывать наши принятые решения, чтобы потом можно было их пересмотреть. 
+Также мы создадим общедоступный источник информации для дальнейшего использования и 
+документирования.
 
-We will use Architecture Decision Records, as described by Michael Nygard in
-this article: http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions
-
-## Consequences
-
-We will keep our decisions described, so then we can revisit them later. Also,
-we will be creating a public input for later usage and documentation.
+На данный момент система построена на трех уровнях, что в скором времени изменится в релизе 3.0.......

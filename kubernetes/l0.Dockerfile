@@ -33,7 +33,7 @@ RUN chmod +x start.sh
 
 EXPOSE 9000 9001 9002
 
-COPY modules/keytool/target/scala-2.13/tessellation-keytool-assembly-${BUILD_VERSION}.jar keytool.jar
-COPY modules/core/target/scala-2.13/tessellation-core-assembly-${BUILD_VERSION}.jar core.jar
+COPY modules/keytool/target/scala-2.13/shiwa-keytool-assembly-${BUILD_VERSION}.jar keytool.jar
+COPY modules/core/target/scala-2.13/shiwa-core-assembly-${BUILD_VERSION}.jar core.jar
 
 CMD ["/bin/sh", "-c", "/app/start.sh"]

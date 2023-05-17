@@ -1,53 +1,53 @@
-# How to Contribute
 
-_Last updated June 2, 2022._
+# Как поучавствовать и внести вклад в проект
 
-Contributing to this project entails submitting pull requests (PRs) to this repository.
 
-1. Fork this repository.
-2. Clone your fork of the repository.
-3. When developing, keep you changes as atomic as possible.
-4. When you are ready to make a PR, fetch from upstream to make sure you have the latest changes from the upstream repository. Add your commit on top of any new commits from upstream:
+Внесение вклада в этот проект предполагает отправку запросов на слияние (PR) в этот репозиторий.
+
+1. Форкните этот репозиторий.
+2. Клонируйте ваш форк репозитория.
+3. При разработке старайтесь делать изменения как можно более дробными.
+4. Когда вы готовы создать PR, получите изменения из основного репозитория, чтобы убедиться, что у вас есть последние изменения из репозитория. Добавьте свой коммит поверх любых новых коммитов из основного репозитория:
 
 ```
 git fetch origin
 git rebase origin/develop
-git checkout <your branch>
+git checkout <ваша ветка>
 git rebase develop
 ```
 
-5. Set your local branch to track its equivalent on the remote server. Push your changes to that remote branch.
-6. Create a PR.
-7. In your PR, note which of the below categories your PR belongs to.
-   - Bug fix
-   - Feature
-   - Documentation
-   - New/updated tests
+5. Установите отслеживание локальной ветки своего эквивалента на удаленном сервере. Отправьте свои изменения на эту удаленную ветку.
+6. Создайте PR.
+7. В своем PR укажите, к какой из нижеперечисленных категорий относится ваш PR.
+   - Исправление ошибок
+   - Функциональность
+   - Документация
+   - Новые/обновленные тесты
 
-# When developing
+# При разработке
 
-- Try to mimic the style of the repository.
-- Use Scala's formatter, [scalafmt](https://scalameta.org/scalafmt/), and [ScalaFix](https://scalacenter.github.io/scalafix/). Before committing, run `sbt runLinter`.
+- Старайтесь имитировать стиль репозитория.
+- Используйте форматтер Scala, [scalafmt](https://scalameta.org/scalafmt/), и [ScalaFix](https://scalacenter.github.io/scalafix/). Перед коммитом запустите `sbt runLinter`.
 
-## Setting up _scalafmt_
-- For IntelliJ, click [here](https://www.jetbrains.com/help/idea/work-with-scala-formatter.html).
+## Настройка _scalafmt_
+- Для IntelliJ нажмите [здесь](https://www.jetbrains.com/help/idea/work-with-scala-formatter.html).
 
-# Running SBT in the command-line
+# Запуск SBT в командной строке
 
-Run these commands from the base directory of this project.
+Запустите эти команды из базовой директории этого проекта.
 
-- `sbt compile` - compiles the project.
-- `sbt test` - runs the tests.
-- `sbt runLinter` - automatically formats the code according to the style guide.
+- `sbt compile` - компилирует проект.
+- `sbt test` - запускает тесты.
+- `sbt runLinter` - автоматически форматирует код в соответствии со стандартом стиля.
 
-# Setting Up SBT
+# Настройка SBT
 
-After installing _SBT_, per the SETUP guide, you have to configure it.
+После установки _SBT_ в соответствии с руководством SETUP, вы должны настроить его.
 
-1. Generate a _Github Personal Access Token_, [link](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
-2. Set your global _SBT_ configuration.
-   1. Create the _~/.sbt/1.0/github.sbt_ file.
-   2. Copy into it below. Replace _---Token---_ with the Personal Access Token you generated and _---Github ID---_ with your Github username.
+1. Сгенерируйте _личный токен доступа Github_, [ссылка](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+2. Настройте глобальную конфигурацию _SBT_.
+   1. Создайте файл _~/.sbt/1.0/github.sbt_.
+   2. Скопируйте следующий текст в файл. Замените _---Token---_ на ваш персональный токен доступа, сгенерированный ранее, а _---Github Id---_ на ваше имя пользователя Github.
 
 ```
 credentials +=
@@ -60,5 +60,5 @@ credentials +=
 githubTokenSource := TokenSource.GitConfig("github.token")
 ```
 
-3. Create the file _~/.sbt/1.0/plugins/plugin.sbt_.
-   1. Copy into it: `addSbtPlugin("com.codecommit" % "sbt-github-packages" % "0.5.3")`
+3. Создайте файл _~/.sbt/1.0/plugins/plugin.sbt_.
+   1. Скопируйте следующий текст: `addSbtPlugin("com.codecommit" % "sbt-github-packages" % "0.5.3")`

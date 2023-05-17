@@ -8,7 +8,8 @@ Accepted
 
 ## Context
 
-We need a versioning scheme for the project that will allow simultaneous development of the library modules (`kernel` and `sdk`) and the projects in the `examples/` directory that can depend 
+We need a versioning scheme for the project that will allow simultaneous development of the library modules (`kernel`
+and `sdk`) and the projects in the `examples/` directory that can depend
 on the library modules. SNAPSHOT versioning will allow this.
 
 ## Decision
@@ -16,14 +17,16 @@ on the library modules. SNAPSHOT versioning will allow this.
 1. `main` branch contains changes that have been released.
 2. `develop` branch contains changes that haven't been released yet.
 3. Project versioning follows [semver](https://semver.org).
-4. `main` branch must contain version without precedence (`MAJOR.MINOR.PATCH`) - version `a.b.c-alpha` or `a.b.c-SNAPSHOT` is not allowed.
+4. `main` branch must contain version without precedence (`MAJOR.MINOR.PATCH`) - version `a.b.c-alpha`
+   or `a.b.c-SNAPSHOT` is not allowed.
 5. `develop` branch should reflect the next development version of the latest
    release, so `MAJOR.MINOR+1.0-SNAPSHOT`.
 
-Example: when the latest released version is `v0.5.0`, the project version on `main` branch is `v0.5.0` while 
+Example: when the latest released version is `v0.5.0`, the project version on `main` branch is `v0.5.0` while
 on `develop` branch, the project version is `v0.6.0-SNAPSHOT`.
 
-6. For merging release or hotfix changes back into main or develop, `git merge` should be used, with fast-forward when possible.
+6. For merging release or hotfix changes back into main or develop, `git merge` should be used, with fast-forward when
+   possible.
 
 ### Release flow
 
@@ -40,9 +43,12 @@ on `develop` branch, the project version is `v0.6.0-SNAPSHOT`.
 
 ### Hotfixes flow
 
-1. Create branch from the `main` branch by incrementing the patch version `hotfix/vA.B.C+1`. (example: latest release `v1.5.0`, branch name: `hotfix/v1.5.1`)
-2. Create commit with hotfix development version `vA.B.C-SNAPSHOT` (example: `v1.5.1-SNAPSHOT`). It's because hotfix may contain more than one commit.
-3. Develop fix by merging pull requests into the hotfix branch (pull requests are required to have a correct CHANGELOG for release).
+1. Create branch from the `main` branch by incrementing the patch version `hotfix/vA.B.C+1`. (example: latest
+   release `v1.5.0`, branch name: `hotfix/v1.5.1`)
+2. Create commit with hotfix development version `vA.B.C-SNAPSHOT` (example: `v1.5.1-SNAPSHOT`). It's because hotfix may
+   contain more than one commit.
+3. Develop fix by merging pull requests into the hotfix branch (pull requests are required to have a correct CHANGELOG
+   for release).
 4. Create commit with updated version and removed `-SNAPSHOT` precedence: `vA.B.C`.
 5. Merge hotfix branch to `main` using `git merge`.
 6. Create tag reflecting released version `git tag vA.B.C`.

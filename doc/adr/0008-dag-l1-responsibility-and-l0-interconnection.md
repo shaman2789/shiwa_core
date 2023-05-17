@@ -1,6 +1,4 @@
-# 8. DAG L1 responsibility and L0 interconnection
-
-Date: 2022-01-05
+# DAG L1 responsibility and L0 interconnection
 
 ## Status
 

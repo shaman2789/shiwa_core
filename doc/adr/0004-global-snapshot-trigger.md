@@ -1,37 +1,24 @@
-# 4. Global snapshot trigger
 
-Date: 2022-01-17
+## Контекст
 
-## Status
+Глобальный снимок должен иметь детерминированный триггер, чтобы снимки, созданные на разных узлах, сходились (содержали одни и те же данные) и проходили алгоритм большинства.
 
-Accepted
+Как описано в [ADR#2](./0007-global-and-state-channel-snapshots.md), Глобальный снимок содержит как DAG блоки, так и снимки StateChannel.
 
-## Context
+## Решение
 
-Global snapshot must have a deterministic trigger so then snapshots created on
-different nodes should converge (contains the same data) and pass the majority algorithm.
+Существует два способа запуска Глобального Снимка: "Триггер советов" и "Периодический триггер".
 
-As described in [ADR#2](./0007-global-and-state-channel-snapshots.md), Global
-snapshot contains both DAG blocks and StateChannel snapshots.
+### Триггер советов
+L1 узлы отправляют данные советов вместе с блоками. L0 узлы агрегируют советы и запускают Глобальный Снимок, когда советы достигнут некоторого интервала (будет жестко задан). Этот триггер создает "непустой" Глобальный Снимок и должен увеличивать `height` и устанавливать `subHeight` равным `0`.
 
-## Decision
+### Периодический триггер
+Если с L1 не отправляются новые блоки, то L0 узлы периодически пытаются создать "пустой" Глобальный Снимок. Каждый новый "пустой" Глобальный Снимок должен увеличивать `subHeight`, пока не будет создан "непустой" снимок.
 
-There are 2 ways of triggering the Global Snapshot: "Tips trigger" and "Periodic trigger".
+### Ординал
+Каждый снимок имеет уникальный ординальный номер. Ординальный номер назначается новому Глобальному Снимку путем увеличения значения предыдущего Глобального Снимка. Это происходит всегда, независимо от выбранного триггера.
 
-### Tips trigger
-L1 nodes send tips data along with the blocks. L0 nodes aggregate the tips and trigger the Global Snapshot
-when tips reached some interval (will be hardcoded). That trigger creates "non-empty" Global Snapshot
-and should increment `height` and set `subHeight` to `0`.
+## Последствия
 
-### Periodic trigger
-If there are no new blocks sent from L1 then L0 nodes - periodically try to create "empty" Global Snapshot.
-Each new "empty" Global Snapshot should increment `subHeight` until "non-empty" snapshot is created.
-
-### Ordinal
-Each snapshot has unique ordinal number. Ordinal number is assigned to new Global Snapshot
-by incrementing the value od previous Global Snapshot. It happens always no matter which trigger has been chosen.
-
-## Consequences
-
-- Global Snapshots created by different triggers should increment height in a different way
-- Ordinal number should be introduced in Global Snapshots to make it compatible with Rosetta
+- Глобальные Снимки, созданные разными триггерами, должны увеличивать `height` по-разному.
+- В Глобальных Снимках должен быть введен ординальный номер, чтобы они были совместимы с Rosetta.
